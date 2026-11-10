@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Can you spot the machine? A Human-or-AI ad gallery across six marketing channels. DMD 2030 final project, UConn Stamford.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B2F2C'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23F2C27A' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%23F2C27A'/%3E%3C/svg%3E">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Spot the Machine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Martian+Mono:wdth,wght@75..112,400..500&display=swap">
+<style>
+/* Layout: a print shop's proof sheet. CMYK color blocks, halftone dots, registration marks and color bars;
+   ruled rows and tables inside; red is kept for human markup; one mounted proof (the ad) at the end. */
+:root {
+  --paper: #EDEDE7;
+  --sheet: #F7F7F2;
+  --ink: #1E1C2A;
+  --muted: #5D5B67;
+  --line: #D1D0D3;
+  --red: #C4452F;
+  --red-wash: rgba(196, 69, 47, .08);
+  --rose-ink: #B23A68;
+  --aqua-ink: #1F7590;
+  --band: #1E1C2A;
+  --band-ink: #ECECE7;
+  --band-muted: #9C9C95;
+  --band-line: #33332F;
+  /* process colors: fixed in both themes */
+  --k: #1E1C2A;
+  --kpaper: #F4F3EE;
+  --cyan: #93D1E2;
+  --magenta: #EE95B6;
+  --yellow: #F3D263;
+  --cyan-a: rgba(80, 175, 205, .85);
+  --rose-a: rgba(226, 104, 150, .8);
+  --sun-a: rgba(240, 200, 70, .9);
+  --display: "Bricolage Grotesque", "Arial Black", Arial, sans-serif;
+  --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Martian Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #17161E; --sheet: #1F1E28; --ink: #ECEAF2; --muted: #A6A4B0; --line: #34323F;
+    --red: #F58A72; --red-wash: rgba(245, 138, 114, .1); --rose-ink: #F29ABB; --aqua-ink: #93D1E2; --band: #0F0E15; --band-line: #2C2A36;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #17161E; --sheet: #1F1E28; --ink: #ECEAF2; --muted: #A6A4B0; --line: #34323F;
+  --red: #F58A72; --red-wash: rgba(245, 138, 114, .1); --rose-ink: #F29ABB; --aqua-ink: #93D1E2; --band: #0F0E15; --band-line: #2C2A36;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--paper); }
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.wrap {
+  max-width: 1200px; margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
+h1 { font-weight: 800; font-size: clamp(44px, 6.4vw, 86px); line-height: .95; letter-spacing: -.045em; }
+h2 { font-weight: 800; font-size: clamp(32px, 4.2vw, 52px); line-height: 1; letter-spacing: -.04em; }
+h3 { font-weight: 750; font-size: 22px; line-height: 1.15; letter-spacing: -.02em; }
+p { margin: 0; }
+.spec { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.lead { font-size: 19px; color: var(--muted); max-width: 54ch; }
+.todo { color: var(--muted); font-style: italic; }
+.note { font-size: 14px; color: var(--muted); }
+section { scroll-margin-top: 64px; }
+.sec { padding-block: 104px 0; }
+.sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 56px; align-items: end; padding-bottom: 28px; border-bottom: 2px solid var(--ink); margin-bottom: 0; }
+
+/* Nav */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--paper); border-bottom: 1px solid var(--ink); }
+.nav-inner { display: flex; align-items: center; gap: 24px; height: 60px; }
+.logo { font-family: var(--display); font-weight: 800; font-size: 18px; letter-spacing: -.03em; text-decoration: none; white-space: nowrap; display: flex; align-items: center; gap: 10px; }
+.reg { width: 18px; height: 18px; flex: none; }
+.links { display: flex; gap: 22px; margin-left: auto; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.links a { text-decoration: none; font-size: 14.5px; color: var(--muted); padding-block: 4px; border-bottom: 2px solid transparent; white-space: nowrap; }
+.links a:hover { color: var(--ink); }
+.links a[aria-current="true"] { color: var(--ink); border-bottom-color: var(--red); }
+.links a.go { color: var(--ink); font-weight: 600; }
+
+/* Hero */
+.hero { padding-block: 88px 96px; border-bottom: 1px solid var(--line); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 64px; align-items: end; }
+.hero h1 { margin: 20px 0 28px; }
+.hero .lead { margin-bottom: 32px; }
+.cta-row { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+.btn { display: inline-flex; align-items: center; height: 46px; padding: 0 20px; border: 1.5px solid var(--ink); border-radius: 2px; background: transparent; font-weight: 600; font-size: 15px; text-decoration: none; }
+.btn.solid { background: var(--ink); color: var(--paper); }
+.textlink { font-weight: 600; font-size: 15px; text-underline-offset: 4px; }
+
+.docket { background: var(--sheet); border: 1px solid var(--ink); }
+.docket-head { display: flex; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--ink); }
+.docket-head b { font-family: var(--mono); font-weight: 500; font-size: 12px; letter-spacing: .12em; }
+.docket dl { margin: 0; }
+.docket .r { display: grid; grid-template-columns: 112px minmax(0, 1fr); border-bottom: 1px solid var(--line); }
+.docket .r:last-child { border-bottom: 0; }
+.docket dt { font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 11px 16px; border-right: 1px solid var(--line); }
+.docket dd { margin: 0; padding: 10px 16px; font-size: 15px; }
+
+/* The job today: a table */
+.tablewrap { overflow-x: auto; }
+table.grid { width: 100%; border-collapse: collapse; min-width: 720px; }
+table.grid th { text-align: left; font-family: var(--mono); font-weight: 500; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 14px 16px 12px 0; border-bottom: 1px solid var(--ink); }
+table.grid td { padding: 16px 16px 16px 0; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 15.5px; }
+table.grid td.n { font-family: var(--display); font-weight: 800; font-size: 22px; width: 56px; letter-spacing: -.03em; }
+table.grid td.step { font-weight: 700; width: 120px; }
+table.grid td.tag { width: 200px; }
+
+/* Ruled rows (Firefly, channel deep dives) */
+.rows { display: flex; flex-direction: column; }
+.row { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 6px 32px; padding-block: 20px; border-bottom: 1px solid var(--line); }
+.row > .spec { padding-top: 4px; }
+.row p + p { margin-top: 8px; }
+.verify { font-family: var(--mono); font-size: 11px; color: var(--red); letter-spacing: .04em; margin-left: 6px; white-space: nowrap; }
+
+/* Channels */
+.index { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid var(--line); }
+.index a { display: flex; gap: 14px; align-items: baseline; padding: 16px 16px 16px 0; text-decoration: none; border-bottom: 1px solid var(--line); }
+.index a:nth-last-child(-n+3) { border-bottom: 0; }
+.index a b { font-family: var(--display); font-weight: 800; font-size: 20px; letter-spacing: -.03em; min-width: 30px; }
+.index a span { display: flex; flex-direction: column; }
+.index a span em { font-style: normal; font-size: 13.5px; color: var(--muted); }
+.index a:hover span > :first-child { text-decoration: underline; text-underline-offset: 3px; }
+
+.chan { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 0 48px; padding-block: 64px; border-bottom: 2px solid var(--ink); }
+.chan-id { position: sticky; top: 92px; align-self: start; display: flex; flex-direction: column; gap: 10px; }
+.chan-num { font-family: var(--display); font-weight: 800; font-size: 96px; line-height: .85; letter-spacing: -.06em; }
+.chan-id h3 { font-size: 30px; letter-spacing: -.035em; }
+.chan-id .who { font-size: 14.5px; color: var(--muted); }
+.chan .rows { border-top: 1px solid var(--ink); }
+.glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 32px; }
+.glance ul { margin: 4px 0 0; padding-left: 18px; }
+.glance .ai-col .spec { color: var(--red); }
+.goals { margin: 8px 0 0; padding-left: 22px; font-weight: 600; }
+.roles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 32px; }
+.role b { display: block; margin-bottom: 4px; }
+.role p { color: var(--muted); font-size: 15.5px; }
+.flow { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 6px; align-items: center; }
+.flow li { display: flex; align-items: center; gap: 6px; }
+.flow li + li::before { content: "\2192"; color: var(--muted); }
+.flow .st { display: flex; flex-direction: column; border: 1px solid var(--line); background: var(--sheet); padding: 7px 11px; }
+.flow .fs { font-weight: 600; font-size: 14.5px; }
+.flow .ft { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.flow .ft.ai-assisted, .flow .ft.automated { color: var(--red); }
+.fc { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 32px; }
+.fc .spec { display: block; margin-bottom: 4px; }
+
+/* Outlook timeline */
+.tl { position: relative; padding: 48px 0 0 56px; --p: 0; }
+.spine { position: absolute; left: 11px; top: 56px; bottom: 0; width: 2px; background: var(--line); }
+.spine i { position: absolute; left: 0; right: 0; top: 0; height: calc(var(--p) * 100%); background: var(--ink); }
+.node { position: relative; padding-bottom: 64px; }
+.node:last-child { padding-bottom: 8px; }
+.node::before { content: ""; position: absolute; left: -51px; top: 8px; width: 14px; height: 14px; background: var(--paper); border: 2px solid var(--line); transform: rotate(45deg); }
+.node.lit::before { background: var(--red); border-color: var(--red); }
+.node .spec { color: var(--red); }
+.node h3 { font-size: clamp(28px, 3.2vw, 40px); letter-spacing: -.04em; margin: 6px 0 10px; }
+.node > p { color: var(--muted); max-width: 60ch; margin-bottom: 20px; }
+.fact { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); max-width: 720px; }
+.fact b { font-family: var(--display); font-weight: 800; font-size: 48px; letter-spacing: -.05em; line-height: 1; }
+.fact span { color: var(--muted); font-size: 15.5px; }
+.fact a { font-size: 14px; color: var(--muted); }
+table.grid.slim { min-width: 600px; }
+table.grid.slim td.theme { width: 190px; font-weight: 600; }
+table.grid.slim td.src { width: 160px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+/* Consequences */
+.cons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 56px; }
+.con { padding-block: 24px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+.con h3 { font-size: 21px; }
+.con p { color: var(--muted); font-size: 15.5px; }
+
+/* The test */
+.test { padding-block: 104px 96px; }
+.test-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: start; margin-top: 48px; }
+.proof-fig { margin: 0; max-width: 480px; width: 100%; justify-self: center; }
+.proof { position: relative; padding: 22px; }
+.proof-fig > .spec { display: block; padding: 0 22px; }
+.cm { position: absolute; width: 22px; height: 22px; }
+.cm::before, .cm::after { content: ""; position: absolute; background: var(--ink); }
+.cm::before { width: 14px; height: 1px; }
+.cm::after { width: 1px; height: 14px; }
+.cm.tl { top: 0; left: 0; } .cm.tl::before { bottom: 0; left: 0; } .cm.tl::after { right: 0; top: 0; }
+.cm.tr { top: 0; right: 0; } .cm.tr::before { bottom: 0; right: 0; } .cm.tr::after { left: 0; top: 0; }
+.cm.bl { bottom: 0; left: 0; } .cm.bl::before { top: 0; left: 0; } .cm.bl::after { right: 0; bottom: 0; }
+.cm.br { bottom: 0; right: 0; } .cm.br::before { top: 0; right: 0; } .cm.br::after { left: 0; bottom: 0; }
+.ad { position: relative; width: 100%; max-width: 100%; background: var(--sheet); border: 1px solid var(--line); overflow: hidden; }
+.ad img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ad .ph { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--muted); }
+.ad .ph b { display: block; font-family: var(--display); font-weight: 800; font-size: 56px; letter-spacing: -.05em; color: var(--ink); }
+.stamp { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%) rotate(-9deg); border: 4px solid var(--red); color: var(--red); background: var(--red-wash);
+  font-family: var(--mono); font-weight: 500; font-size: clamp(18px, 2.6vw, 26px); letter-spacing: .14em; padding: 10px 18px; white-space: nowrap; pointer-events: none; }
+
+.panel { display: flex; flex-direction: column; gap: 20px; }
+.panel h3 { font-size: 26px; letter-spacing: -.03em; }
+.votes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.vote { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 18px 20px; background: var(--sheet); border: 1.5px solid var(--ink); border-radius: 2px; text-align: left; transition: background .15s; }
+.vote:hover { background: var(--paper); }
+.vote:active { transform: translateY(1px); }
+.vote span { font-weight: 700; font-size: 18px; }
+.vote b { font-family: var(--display); font-weight: 800; font-size: 56px; line-height: .9; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.panel-actions { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.linkbtn { background: none; border: 0; padding: 0; font-size: 14.5px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.answer { border-top: 2px solid var(--red); padding-top: 16px; display: flex; flex-direction: column; gap: 14px; }
+.answer .spec { color: var(--red); }
+.answer .prompt { font-family: var(--mono); font-size: 13px; background: var(--sheet); border: 1px solid var(--line); padding: 12px 14px; overflow-wrap: anywhere; }
+.markup { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.markup li { color: var(--red); font-size: 15.5px; display: flex; gap: 10px; }
+.markup li::before { content: ""; width: 16px; height: 2px; background: var(--red); margin-top: 11px; flex: none; }
+
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 64px; border-top: 2px solid var(--ink); }
+.stat { padding: 20px 24px 4px 0; display: flex; flex-direction: column; gap: 8px; }
+.stat + .stat { border-left: 1px solid var(--line); padding-left: 24px; }
+.stat b { font-family: var(--display); font-weight: 800; font-size: clamp(48px, 6vw, 76px); line-height: .9; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.stat b.red { color: var(--red); }
+.stat p { color: var(--muted); font-size: 15px; max-width: 30ch; }
+
+.sheet { margin-top: 64px; }
+.sheet-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--ink); }
+.contacts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.contact { position: relative; aspect-ratio: 4 / 5; background: var(--sheet); border: 1px solid var(--line); display: flex; align-items: flex-end; padding: 6px; }
+.contact img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.contact .spec { position: relative; font-size: 10.5px; background: var(--sheet); padding: 0 4px; }
+.contact.keep::after { content: ""; position: absolute; inset: -6px; border: 2.5px solid var(--red); border-radius: 50%; }
+
+/* Footer */
+.foot { background: var(--band); color: var(--band-ink); padding-block: 96px 48px; }
+.foot h2 { max-width: 18ch; }
+.foot .cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; margin-top: 72px; padding-top: 32px; border-top: 1px solid var(--band-line); }
+.foot h4 { margin: 0 0 12px; font-family: var(--mono); font-weight: 500; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--band-muted); }
+.foot ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; font-size: 14.5px; }
+.foot a { color: var(--band-ink); text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+.foot p { color: var(--band-muted); font-size: 14px; max-width: 34ch; }
+
+
+/* ===== Color layer ===== */
+.band-y, .band-c { --ink: var(--k); --muted: rgba(30, 28, 42, .74); --line: rgba(30, 28, 42, .2); --sheet: rgba(255, 255, 255, .5); --paper: transparent; color: var(--k); }
+.band-y { background: var(--yellow); }
+.band-c { background: var(--cyan); }
+.band-k { --ink: #F1F0F5; --muted: #ABA9B6; --line: #3A3848; --sheet: #26243A; background: var(--k); color: #F1F0F5; }
+.band-y .todo, .band-c .todo { color: rgba(30, 28, 42, .62); }
+
+.halftone { position: absolute; pointer-events: none; background-image: radial-gradient(var(--k) 30%, transparent 32%); background-size: 11px 11px; }
+.reg-mark { position: absolute; width: 30px; height: 30px; color: var(--k); pointer-events: none; }
+.colorbar { display: flex; height: 16px; }
+.colorbar i { flex: 1; background: var(--c); }
+.colorbar i + i { border-left: 1px solid rgba(0, 0, 0, .15); }
+
+/* nav */
+.nav .reg { color: var(--rose-ink); }
+.links a[aria-current="true"] { border-bottom-color: var(--rose-ink); }
+
+/* hero */
+.hero.band-y { position: relative; overflow: hidden; padding-block: 96px 120px; border-bottom: 0; }
+.hero .halftone { right: -40px; bottom: -40px; width: 520px; height: 420px; opacity: .9;
+  -webkit-mask-image: radial-gradient(circle at 100% 100%, #000 10%, transparent 70%); mask-image: radial-gradient(circle at 100% 100%, #000 10%, transparent 70%); }
+.hero .reg-mark.a { top: 20px; right: 24px; }
+.hero .reg-mark.b { bottom: 34px; left: 20px; }
+.hero .colorbar { position: absolute; left: 0; right: 0; bottom: 0; }
+.hero h1 { font-size: clamp(48px, 7.4vw, 112px); }
+.hero .lead { color: var(--k); font-size: 20px; }
+.hero .btn.solid { background: var(--k); color: var(--yellow); border-color: var(--k); }
+.hero-grid { position: relative; z-index: 1; }
+.docket { position: relative; transform: rotate(-2deg); background: #FFFFFF; color: var(--k); border: 2px solid var(--k); box-shadow: 8px 8px 0 var(--k);
+  --line: #D9D9D2; --muted: #5E5E58; }
+.docket::before, .docket::after { content: ""; position: absolute; top: -14px; width: 92px; height: 26px; background: rgba(255, 255, 255, .62); border: 1px solid rgba(0, 0, 0, .08); }
+.docket::before { left: -22px; top: -10px; transform: rotate(-32deg); }
+.docket::after { right: -22px; top: -10px; transform: rotate(30deg); }
+.docket-head { background: var(--magenta); color: var(--k); border-bottom: 2px solid var(--k); }
+
+/* ticker */
+.ticker { background: var(--k); color: var(--yellow); position: relative; overflow: hidden; border-block: 2px solid var(--k); }
+.ticker-track { display: flex; width: max-content; will-change: transform; }
+.ticker-track span { font-family: var(--display); font-weight: 800; font-size: 28px; letter-spacing: -.02em; text-transform: uppercase; padding: 14px 0; white-space: nowrap; display: flex; align-items: center; }
+.ticker-track span::after { content: ""; width: 14px; height: 14px; border-radius: 50%; margin: 0 28px; background: var(--dot, var(--cyan)); }
+
+/* the job: colored step numbers */
+table.grid td.n span { display: inline-grid; place-items: center; width: 40px; height: 40px; background: var(--bg); color: var(--fg); font-size: 20px; }
+
+/* firefly band */
+#firefly.band-c { position: relative; overflow: hidden; padding-block: 104px 104px; margin-top: 104px; }
+#firefly .halftone { left: -30px; top: -30px; width: 380px; height: 300px; opacity: .35;
+  -webkit-mask-image: radial-gradient(circle at 0 0, #000 15%, transparent 70%); mask-image: radial-gradient(circle at 0 0, #000 15%, transparent 70%); }
+#firefly .wrap { position: relative; }
+#firefly .verify { background: var(--k); color: var(--yellow); padding: 2px 6px; }
+#firefly .sec-head { border-bottom-width: 3px; }
+
+/* channels: a colored slab per channel */
+.chan-id { background: var(--slab); color: var(--slab-ink); padding: 28px 24px 24px; box-shadow: 8px 8px 0 var(--k); border: 2px solid var(--k); }
+.chan-id .who { color: inherit; opacity: .8; }
+.chan-num { font-size: 120px; }
+.chan .ai-col .spec, .flow .ft.ai-assisted, .flow .ft.automated { color: var(--rose-ink); }
+.index a b { color: var(--rose-ink); }
+
+/* outlook */
+#outlook { position: relative; overflow: hidden; }
+#outlook .ghost { position: absolute; right: -12px; top: 40px; will-change: transform; font-family: var(--display); font-weight: 800; font-size: clamp(140px, 22vw, 320px); line-height: .8; letter-spacing: -.06em;
+  color: transparent; -webkit-text-stroke: 2px var(--magenta); opacity: .7; pointer-events: none; }
+#outlook .wrap { position: relative; }
+.spine i { background: linear-gradient(var(--cyan), var(--magenta), var(--yellow)); }
+.node.lit::before { background: var(--magenta); border-color: var(--magenta); }
+.node .spec { color: var(--rose-ink); }
+.fact b { color: var(--aqua-ink); }
+
+/* consequences band */
+#consequences.band-k { padding-block: 104px 104px; margin-top: 104px; position: relative; }
+#consequences .sec-head { border-bottom-color: var(--yellow); }
+#consequences h2 { color: var(--yellow); }
+#consequences .con h3 { color: #FFFFFF; }
+#consequences .con:nth-child(3n+1) h3::before, #consequences .con:nth-child(3n+2) h3::before, #consequences .con:nth-child(3n) h3::before {
+  content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 10px; vertical-align: 2px; background: var(--cyan); }
+#consequences .con:nth-child(3n+2) h3::before { background: var(--magenta); }
+#consequences .con:nth-child(3n) h3::before { background: var(--yellow); }
+
+/* the test */
+.test { position: relative; overflow: hidden; }
+.test .halftone { right: -40px; top: 80px; width: 360px; height: 360px; opacity: .14;
+  -webkit-mask-image: radial-gradient(circle, #000 20%, transparent 70%); mask-image: radial-gradient(circle, #000 20%, transparent 70%); }
+.test .wrap { position: relative; }
+.vote { border: 2px solid var(--k); box-shadow: 6px 6px 0 var(--k); background: #FFFFFF; color: var(--k); }
+.vote:hover { background: var(--yellow); }
+.vote:active { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--k); }
+#revealBtn { background: var(--k); border-color: var(--k); color: var(--yellow); }
+.stat:nth-child(1) b { color: var(--aqua-ink); }
+.stat:nth-child(3) b { color: var(--rose-ink); }
+.ad { border: 2px solid var(--k); }
+
+/* footer */
+.foot { padding-top: 0; }
+.foot .colorbar { margin-bottom: 96px; }
+.foot h2 { color: var(--yellow); font-size: clamp(36px, 5vw, 64px); }
+
+
+@media (max-width: 980px) {
+  .chan-num { font-size: 72px; }
+  .chan-id { box-shadow: 5px 5px 0 var(--k); }
+  .docket { transform: rotate(-1deg); }
+  .hero .halftone { width: 300px; height: 260px; }
+}
+@media (max-width: 640px) {
+  .ticker-track span { font-size: 20px; padding: 10px 0; }
+  .ticker-track span::after { margin: 0 18px; width: 10px; height: 10px; }
+  .docket { box-shadow: 5px 5px 0 var(--k); }
+}
+
+/* ===== Motion layer ===== */
+.hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero h1 { font-weight: 800; }
+.hero h1 .w { display: inline-block; }
+.progress { position: absolute; left: 0; right: 0; bottom: -4px; height: 4px; pointer-events: none; }
+.progress i { display: block; height: 100%; transform-origin: left center; transform: scaleX(0);
+  background: linear-gradient(90deg, var(--cyan) 0 25%, var(--magenta) 25% 50%, var(--yellow) 50% 75%, var(--k) 75%); }
+table.grid tbody tr { transition: background .2s; }
+table.grid tbody tr:hover { background: var(--sheet); }
+table.grid tbody tr:hover td.n span { transform: rotate(-8deg) scale(1.1); }
+table.grid td.n span { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1); }
+.chan-id { transition: transform .35s cubic-bezier(.3, 1.4, .5, 1), box-shadow .35s; }
+.chan-id:hover { transform: translate(-3px, -3px) rotate(-1.5deg); box-shadow: 12px 12px 0 var(--k); }
+.index a { position: relative; }
+.index a::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 3px; width: 100%; background: var(--magenta); transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
+.index a:hover::after { transform: scaleX(1); }
+.con h3::before { transition: transform .4s cubic-bezier(.3, 1.6, .5, 1); }
+.con:hover h3::before { transform: rotate(45deg) scale(1.3); }
+.proof { transform-origin: 50% 60%; }
+.ink { position: absolute; left: 50%; top: 46%; width: var(--s); height: var(--s); border-radius: 50%; background: var(--c); pointer-events: none; z-index: 2; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1 .w { animation: wordIn 1.1s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i) * 70ms + 120ms); }
+  @keyframes wordIn {
+    from { transform: translateY(45%) rotate(3deg); opacity: .15; font-stretch: 75%;
+      text-shadow: -.09em .04em 0 var(--cyan-a), .09em -.03em 0 var(--rose-a); }
+    60% { text-shadow: -.02em .01em 0 var(--cyan-a), .02em -.01em 0 var(--rose-a); }
+    to { transform: none; opacity: 1; font-stretch: 100%; text-shadow: 0 0 0 transparent, 0 0 0 transparent; }
+  }
+  .in .sec-head h2, #outlook.in .node h3 { animation: register 1.4s cubic-bezier(.2, .7, .2, 1) both; }
+  @keyframes register {
+    0% { text-shadow: -.12em .05em 0 var(--cyan-a), .12em -.04em 0 var(--rose-a), .02em .12em 0 var(--sun-a); letter-spacing: .01em; }
+    55% { text-shadow: -.025em .01em 0 var(--cyan-a), .025em -.01em 0 var(--rose-a), 0 .025em 0 var(--sun-a); }
+    100% { text-shadow: 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent; }
+  }
+  .band-c.in { animation: wipeL 1.1s cubic-bezier(.7, 0, .2, 1) both; }
+  .band-k.in { animation: wipeR 1.1s cubic-bezier(.7, 0, .2, 1) both; }
+  @keyframes wipeL { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes wipeR { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
+  .chan.in .chan-id { animation: slab .95s cubic-bezier(.2, .9, .25, 1.15) both; }
+  @keyframes slab { from { transform: translate(-40px, 24px) rotate(-7deg); box-shadow: 0 0 0 var(--k); opacity: .3; } to { transform: none; box-shadow: 8px 8px 0 var(--k); opacity: 1; } }
+  .in table.grid tbody tr { animation: rise .6s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--r, 0) * 70ms + 200ms); }
+  .in table.grid td.n span { animation: pop2 .6s cubic-bezier(.3, 1.6, .5, 1) both; animation-delay: calc(var(--r, 0) * 70ms + 320ms); }
+  @keyframes pop2 { from { transform: scale(0) rotate(-90deg); } to { transform: none; } }
+  .docket { animation: bob 7s ease-in-out infinite; }
+  @keyframes bob { 0%, 100% { transform: rotate(-2deg) translateY(0); } 50% { transform: rotate(-.5deg) translateY(-8px); } }
+  .proof.shake { animation: shake .5s cubic-bezier(.36, .07, .19, .97); }
+  @keyframes shake { 15% { transform: translate(-6px, 2px) rotate(-1deg); } 30% { transform: translate(5px, -2px) rotate(.8deg); } 45% { transform: translate(-3px, 1px); } 60% { transform: translate(2px, 0); } 100% { transform: none; } }
+  .ink { animation: splat .9s cubic-bezier(.15, .8, .3, 1) forwards; }
+  @keyframes splat { from { transform: translate(-50%, -50%) scale(.3); opacity: 1; } to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1); opacity: 0; } }
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .links { display: none; }
+  .hero-grid, .sec-head, .test-grid { grid-template-columns: minmax(0, 1fr); }
+  .chan { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .chan-id { position: static; flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: 8px 16px; }
+  .chan-num { font-size: 56px; }
+  .index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .index a:nth-last-child(-n+3) { border-bottom: 1px solid var(--line); }
+  .contacts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .foot .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .sec, .test { padding-top: 72px; }
+  .row, .docket .r { grid-template-columns: minmax(0, 1fr); }
+  .docket dt { border-right: 0; padding-bottom: 0; }
+  .glance, .roles, .fc, .cons, .stats, .index { grid-template-columns: minmax(0, 1fr); }
+  .stat + .stat { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+  .tl { padding-left: 40px; }
+  .spine { left: 6px; }
+  .node::before { left: -40px; }
+  .foot .cols { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Motion: sections settle in once; the outlook line fills with scroll; the reveal stamps down */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .in .rv, .chan.in .rv2 { animation: rise .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--d, 0) * 80ms); }
+  .node.lit::before { animation: pop .4s cubic-bezier(.3, 1.6, .5, 1); }
+  .stamp { animation: stamp .45s cubic-bezier(.2, 1.4, .4, 1) both; }
+  .answer { animation: rise .5s ease-out both; }
+  .vote b.bump { animation: bump .3s ease-out; }
+  @keyframes rise { from { transform: translateY(18px); opacity: .3; } to { transform: none; opacity: 1; } }
+  @keyframes pop { from { transform: rotate(45deg) scale(.4); } to { transform: rotate(45deg) scale(1); } }
+  @keyframes stamp { from { transform: translate(-50%, -50%) rotate(-9deg) scale(2.2); opacity: 0; } to { transform: translate(-50%, -50%) rotate(-9deg) scale(1); opacity: 1; } }
+  @keyframes bump { 40% { transform: translateY(-4px); } }
+}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top">
+      <svg class="reg" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 0v18M0 9h18" stroke="currentColor" stroke-width="1.5"/></svg>
+      Spot the Machine
+    </a>
+    <div class="links" id="links">
+      <a href="#job" data-for="job">The job</a>
+      <a href="#firefly" data-for="firefly">Firefly</a>
+      <a href="#channels" data-for="channels">Channels</a>
+      <a href="#outlook" data-for="outlook">Outlook</a>
+      <a href="#consequences" data-for="consequences">Consequences</a>
+      <a href="#test" data-for="test" class="go">The test</a>
+    </div>
+  </div>
+  <div class="progress" aria-hidden="true"><i id="progress"></i></div>
+</nav>
+
+<header class="hero band-y" id="top">
+  <canvas class="hero-canvas" id="halftone" aria-hidden="true"></canvas>
+  <svg class="reg-mark a" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="15" r="3.5" fill="currentColor"/><path d="M15 0v30M0 15h30" stroke="currentColor" stroke-width="1.5"/></svg>
+  <svg class="reg-mark b" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="15" r="3.5" fill="currentColor"/><path d="M15 0v30M0 15h30" stroke="currentColor" stroke-width="1.5"/></svg>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="spec">DMD 2030 · Final project · UConn Stamford</p>
+      <h1>When AI can make the ad, what is the marketer for?</h1>
+      <p class="lead">We split marketing into six channels and asked the same questions of each: who does the work today, which tasks AI is taking over, and what changes by 2031. At the end there is one ad. You decide who made it.</p>
+      <div class="cta-row">
+        <a class="btn solid" href="#job">Start with the job</a>
+        <a class="textlink" href="#test">Skip to the test</a>
+      </div>
+    </div>
+    <aside class="docket" aria-label="Project details">
+      <div class="docket-head"><b>JOB DOCKET</b><b>2030</b></div>
+      <dl>
+        <div class="r"><dt>Question</dt><dd>How does AI change marketing work by 2031?</dd></div>
+        <div class="r"><dt>Domain</dt><dd>Marketing, in six channels</dd></div>
+        <div class="r"><dt>Tool tested</dt><dd>Adobe Firefly</dd></div>
+        <div class="r"><dt>Team</dt><dd id="docketTeam"></dd></div>
+        <div class="r"><dt>Deliverable</dt><dd>This site, and one ad</dd></div>
+      </dl>
+    </aside>
+  </div>
+  <div class="colorbar" aria-hidden="true"><i style="--c:#93D1E2"></i><i style="--c:#EE95B6"></i><i style="--c:#F3D263"></i><i style="--c:#1E1C2A"></i><i style="--c:#7F9BD8"></i><i style="--c:#F09A80"></i><i style="--c:#9BCFAE"></i><i style="--c:#5D5B67"></i><i style="--c:#8E8C97"></i><i style="--c:#C3C2C8"></i><i style="--c:#F7F7F2"></i></div>
+</header>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+
+<section class="sec" id="job" aria-labelledby="job-h">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2 id="job-h">Every campaign runs through the same seven steps.</h2>
+      <p class="lead">Whatever the channel, the work moves from a client's goal to a measured result. This is where AI is entering each step.</p>
+    </div>
+    <div class="tablewrap rv" style="--d:1">
+      <table class="grid">
+        <thead><tr><th></th><th>Step</th><th>What happens</th><th>Who does it now</th><th>By 2031</th></tr></thead>
+        <tbody id="jobRows"></tbody>
+      </table>
+    </div>
+    <p class="note rv" style="--d:2;margin-top:14px">Draft from general agency practice. To be checked against our interview.</p>
+  </div>
+</section>
+
+<section class="band-c" id="firefly" aria-labelledby="ff-h">
+  <div class="halftone" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2 id="ff-h">The tool we tested: Adobe Firefly.</h2>
+      <p class="lead">Adobe's image generator, sold to brands as safe for commercial use. We used it to make the ad at the end of this page.</p>
+    </div>
+    <div class="rows" id="ffRows"></div>
+  </div>
+</section>
+
+<section class="sec" id="channels" aria-labelledby="ch-h">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2 id="ch-h">Six channels, from first impression to the inbox.</h2>
+      <p class="lead">Each one is researched by one of us, in the same order: what the channel is for, who works in it, the workflow, a task we tested, and what changes next.</p>
+    </div>
+    <nav class="index rv" style="--d:1" id="chanIndex" aria-label="Channels"></nav>
+  </div>
+  <div class="wrap" id="chanList"></div>
+</section>
+
+<section class="sec" id="outlook" aria-labelledby="ol-h">
+  <span class="ghost" aria-hidden="true">2031</span>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2 id="ol-h">What could happen to marketing next.</h2>
+      <p class="lead">Industry-wide, beyond any one channel. Two horizons: one to three years, and three to five. Every line needs a source.</p>
+    </div>
+    <div class="tl" id="tl">
+      <div class="spine" aria-hidden="true"><i></i></div>
+      <div id="nodes"></div>
+    </div>
+  </div>
+</section>
+
+<section class="band-k" id="consequences" aria-labelledby="cq-h">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2 id="cq-h">What nobody planned for.</h2>
+      <p class="lead">Unintended outcomes for the people who do this work: their roles, their ethics, and how they see themselves.</p>
+    </div>
+    <div class="cons" id="cons"></div>
+  </div>
+</section>
+
+<section class="test" id="test" aria-labelledby="test-h">
+  <div class="halftone" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2 id="test-h">One ad. Who made it?</h2>
+      <p class="lead">Look at it for ten seconds. Then raise a hand for Human or AI, and we count.</p>
+    </div>
+    <div class="test-grid">
+      <figure class="proof-fig rv" style="--d:1">
+        <div class="proof" id="proof">
+          <span class="cm tl"></span><span class="cm tr"></span><span class="cm bl"></span><span class="cm br"></span>
+          <div class="ad" id="ad"></div>
+        </div>
+        <figcaption class="spec" id="adSpec"></figcaption>
+      </figure>
+      <div class="panel rv" style="--d:2">
+        <h3>Your vote</h3>
+        <div class="votes">
+          <button class="vote" id="vH" type="button" aria-label="Vote human"><span>Human</span><b id="cH">0</b></button>
+          <button class="vote" id="vA" type="button" aria-label="Vote AI"><span>AI</span><b id="cA">0</b></button>
+        </div>
+        <div class="panel-actions">
+          <button class="btn solid" id="revealBtn" type="button" aria-pressed="false">Reveal the answer</button>
+          <button class="linkbtn" id="undoBtn" type="button">Undo last vote</button>
+          <span id="clearSlot"></span>
+        </div>
+        <div id="answer" hidden></div>
+      </div>
+    </div>
+    <div class="stats rv" style="--d:3">
+      <div class="stat"><b id="sN">0</b><p>Votes cast in this room</p></div>
+      <div class="stat"><b class="red" id="sAI">?</b><p>Of this room said AI. Shown after the reveal.</p></div>
+      <div class="stat"><b>70%</b><p>Of consumers say they can spot AI-generated ads (Canva, 2026)</p></div>
+    </div>
+    <div class="sheet" id="sheet" hidden>
+      <div class="sheet-head"><h3>Everything we threw away</h3><span class="spec" id="sheetSpec"></span></div>
+      <div class="contacts" id="contacts"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="colorbar" aria-hidden="true"><i style="--c:#93D1E2"></i><i style="--c:#EE95B6"></i><i style="--c:#F3D263"></i><i style="--c:#1E1C2A"></i><i style="--c:#7F9BD8"></i><i style="--c:#F09A80"></i><i style="--c:#9BCFAE"></i><i style="--c:#5D5B67"></i><i style="--c:#8E8C97"></i><i style="--c:#C3C2C8"></i><i style="--c:#F7F7F2"></i></div>
+  <div class="wrap">
+    <h2>The tool made the image. People decided which one was worth showing.</h2>
+    <div class="cols">
+      <div><p>DMD 2030 final project, UConn Stamford. Researched by the six of us; built with Claude and Adobe Firefly.</p></div>
+      <div><h4>Team</h4><ul id="team"></ul></div>
+      <div><h4>Sections</h4><ul>
+        <li><a href="#job">The job</a></li><li><a href="#firefly">Firefly</a></li><li><a href="#channels">Channels</a></li>
+        <li><a href="#outlook">Outlook</a></li><li><a href="#consequences">Consequences</a></li><li><a href="#test">The test</a></li></ul></div>
+      <div><h4>Sources</h4><ul>
+        <li><a href="https://investor.forrester.com/news-releases/news-release-details/forrester-nine-10-us-marketing-agencies-use-ai-cut-costs-expense" target="_blank" rel="noopener">Forrester × 4As, 2026</a></li>
+        <li><a href="https://supermetrics.com/blog/ai-marketing-statistics" target="_blank" rel="noopener">Canva, via Supermetrics</a></li>
+        <li><a href="https://jasper.ai/state-of-ai-marketing-2026" target="_blank" rel="noopener">Jasper, 2026</a></li>
+      </ul></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============ CONTENT: edit here. Anything in [brackets] shows as a placeholder. ============ */
+
+/* The one ad. Put the image file next to index.html and set src, e.g. "ad.jpg". */
+const AD = {
+  src: "",
+  title: "[Ad title]",
+  format: "[Format, e.g. Instagram post]",
+  ratio: "4:5",
+  prompt: "[Paste the exact Firefly prompt]",
+  attempts: "[N]",
+  notes: ["[Direction note from the group, e.g. too generic]", "[Another note]", "[Another note]"],
+  rejects: ["", "", "", "", "", "", "", "", "", "", ""]   /* image paths of the throwaways */
+};
+
+const JOB = [
+  { step: "Brief", what: "The client sets the goal, the audience and the budget", who: "Account manager, client" },
+  { step: "Research", what: "Who the audience is and what competitors are doing", who: "Strategist, researcher" },
+  { step: "Concept", what: "The big idea, and how it should look and sound", who: "Creative director, art director, copywriter" },
+  { step: "Create", what: "Copy, images, video and layouts in every size", who: "Designers, copywriters, producers" },
+  { step: "Review", what: "Client, brand and legal sign-off", who: "Client, account team, legal" },
+  { step: "Launch", what: "Placing the work in each channel, on schedule", who: "Media buyers, channel managers" },
+  { step: "Measure", what: "What worked, and what to change next time", who: "Analysts, channel managers" }
+].map(r => ({ ...r, by2031: "[Human-led, AI-assisted or automated?]" }));
+
+const FIREFLY = [
+  { k: "What it is", v: ["Adobe's family of generative AI models for images, built into Photoshop, Illustrator, Express and its own web app."], verify: true },
+  { k: "Trained on", v: ["Adobe says Firefly is trained on licensed content such as Adobe Stock, plus public-domain work, and markets it as safe for commercial use."], verify: true },
+  { k: "Labeling", v: ["Images can carry Content Credentials, a record that says AI was used to make them."], verify: true },
+  { k: "What we tested", v: ["[What we asked it to make, how many tries it took, and what it got wrong]"] },
+  { k: "Where it fell short", v: ["[What it refused, flattened or could not do without a person fixing it]"] }
+];
+
+const CHANNELS = [
+  { id: "brand", name: "Brand advertising", stage: "Awareness", owner: "Elizabeth C.",
+    automates: ["Concept visuals", "Variations", "Resizing"], human: ["The big idea", "Taste", "Brand consistency"] },
+  { id: "social", name: "Social media", stage: "Awareness", owner: "Martin G.",
+    automates: ["Post volume", "Captions", "Trend formats"], human: ["Brand voice", "Community", "Cultural timing"] },
+  { id: "content", name: "Content & copywriting", stage: "Consideration", owner: "Emiliano S.",
+    automates: ["First drafts", "Headline variants", "SEO copy"], human: ["Storytelling", "Editing", "Point of view"] },
+  { id: "search", name: "AI search", stage: "Consideration", owner: "[Sixth member]",
+    automates: ["Answers that replace clicks", "Comparisons", "Keyword research"], human: ["Reputation", "Trust", "Original expertise"] },
+  { id: "paid", name: "Paid performance", stage: "Conversion", owner: "Shiven J.",
+    automates: ["Bidding", "Targeting", "Variant testing"], human: ["Budget strategy", "Deciding what good means", "Brand safety"] },
+  { id: "email", name: "Email & personalization", stage: "Retention", owner: "Lee C.",
+    automates: ["Segmentation", "Send timing", "One-to-one content"], human: ["Privacy calls", "Tone", "When not to send"] }
+];
+/* Deep dive per channel. Workflow tags: "Human-led", "AI-assisted" or "Automated". */
+CHANNELS.forEach(c => {
+  c.deep = {
+    purpose: ["[Goal of this channel, in plain words]"],
+    roles: [{ t: "[Job title]", d: "[What this person does day to day]" }, { t: "[Job title]", d: "[What this person does day to day]" }],
+    workflow: "[List the steps of the job in order, then tag each one: human-led, AI-assisted or automated]",
+    tested: "[One real task we tried with Claude or Firefly: what we asked, what came back, what a person had to fix]",
+    short: "[What changes in 1–3 years, with a source]",
+    medium: "[What changes in 3–5 years, with a source]",
+    consequence: "[One unintended outcome for the people in these roles]"
+  };
+});
+Object.assign(CHANNELS.find(c => c.id === "email").deep, {
+  note: "Personalized to each subscriber, or tailored to a specific niche. Every email has to do one of two things:",
+  purpose: ["Deliver new information", "Deliver valuable information"],
+  roles: [
+    { t: "Email marketing manager", d: "Leads and oversees the overall strategy and planning: dates and goals, and automating the system while keeping to a budget." },
+    { t: "Marketing specialist", d: "Does the day-to-day work and builds the emails. Keeps the schedule and sending on track, and manages clients or subscribers." }
+  ],
+  workflow: ["Plan the calendar", "Segment the list", "Write", "Design", "Test", "Send", "Report"].map(step => ({ step, tag: "" }))
+});
+
+const THEMES = ["Jobs & roles", "Tools & workflow", "Agencies & budgets", "Search & discovery", "Consumers & trust", "Rules & regulation"];
+const OUTLOOK = [
+  { when: "Now · 2026", title: "Where it stands", text: "AI is already inside most agency work. The open question is what it takes over next.",
+    fact: { big: "9 in 10", text: "US marketing agencies use generative AI.", src: "Forrester × 4As, 2026",
+      url: "https://investor.forrester.com/news-releases/news-release-details/forrester-nine-10-us-marketing-agencies-use-ai-cut-costs-expense" } },
+  { when: "Short-term · 1–3 years · 2027–2029", title: "Production changes first", text: "[One sentence summing up the next three years]",
+    rows: THEMES.map(t => ({ t, v: "[What could happen]", s: "[Source]" })) },
+  { when: "Medium-term · 3–5 years · 2029–2031", title: "Then the roles change", text: "[One sentence summing up years three to five]",
+    rows: THEMES.map(t => ({ t, v: "[What could happen]", s: "[Source]" })) }
+];
+
+const CONSEQUENCES = [
+  { q: "Who does the work now?", d: "Which tasks move from makers to directors, and which jobs shrink." },
+  { q: "Which skills still matter?", d: "Taste, briefing and judgment, versus hands-on production." },
+  { q: "Who is responsible?", d: "Bias, accuracy and disclosure when a model makes the ad." },
+  { q: "Who owns the output?", d: "Copyright, training data, and credit for AI-made work." },
+  { q: "Who gets left out?", d: "Entry-level jobs, small studios, and access to paid tools." },
+  { q: "How does it feel?", d: "What it does to a creative's sense of craft and identity." }
+].map(c => ({ ...c, finding: "[A real case, with its source]" }));
+
+/* ============ Rendering ============ */
+const isTodo = x => typeof x === "string" && x.startsWith("[");
+function el(tag, attrs = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v;
+    else if (k === "text") n.textContent = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v);
+  }
+  kids.flat().forEach(k => k != null && n.append(k));
+  return n;
+}
+const txt = (x, tag = "p") => el(tag, { class: isTodo(x) ? "todo" : "", text: x });
+const cell = (x, cls) => el("td", { class: (cls || "") + (isTodo(x) ? " todo" : "") }, x);
+
+const PROCESS = [
+  { bg: "var(--yellow)", fg: "var(--k)" }, { bg: "var(--cyan)", fg: "var(--k)" },
+  { bg: "var(--magenta)", fg: "var(--k)" }, { bg: "var(--k)", fg: "var(--yellow)" }
+];
+const swatch = i => PROCESS.at(i % PROCESS.length);
+function renderStatic() {
+  const words = [...CHANNELS.map(c => c.name), "One ad at the end", "Human or AI?"];
+  const dots = ["var(--cyan)", "var(--magenta)", "var(--yellow)"];
+  const run = () => words.map((w, i) => el("span", { style: "--dot:" + dots.at(i % 3), text: w }));
+  document.getElementById("ticker").replaceChildren(...run(), ...run());
+  document.getElementById("docketTeam").textContent = CHANNELS.map(c => c.owner).join(", ");
+  document.getElementById("team").replaceChildren(...CHANNELS.map(c => el("li", { text: c.owner + ", " + c.name })));
+
+  document.getElementById("jobRows").replaceChildren(...JOB.map((r, i) => el("tr", { style: "--r:" + i },
+    el("td", { class: "n" }, el("span", { style: "--bg:" + swatch(i).bg + ";--fg:" + swatch(i).fg, text: String(i + 1) })), cell(r.step, "step"), cell(r.what), cell(r.who), cell(r.by2031, "tag"))));
+
+  document.getElementById("ffRows").replaceChildren(...FIREFLY.map((r, i) => el("div", { class: "row rv", style: "--d:" + i },
+    el("span", { class: "spec", text: r.k }),
+    el("div", {}, r.v.map(v => el("p", { class: isTodo(v) ? "todo" : "" }, v, r.verify ? el("span", { class: "verify", text: "check current" }) : null))))));
+
+  document.getElementById("chanIndex").replaceChildren(...CHANNELS.map((c, i) => el("a", { href: "#" + c.id },
+    el("b", { text: String(i + 1).padStart(2, "0") }), el("span", {}, el("span", { text: c.name }), el("em", { text: c.stage + " · " + c.owner })))));
+
+  document.getElementById("chanList").replaceChildren(...CHANNELS.map((c, i) => channel(c, i)));
+
+  document.getElementById("nodes").replaceChildren(...OUTLOOK.map(o => el("div", { class: "node" },
+    el("span", { class: "spec", text: o.when }),
+    el("h3", { text: o.title }),
+    txt(o.text),
+    o.fact ? el("div", { class: "fact" }, el("b", { text: o.fact.big }), el("span", { text: o.fact.text }),
+      el("a", { href: o.fact.url, target: "_blank", rel: "noopener", text: o.fact.src })) : null,
+    o.rows ? el("div", { class: "tablewrap" }, el("table", { class: "grid slim" },
+      el("thead", {}, el("tr", {}, el("th", { text: "Theme" }), el("th", { text: "What could happen" }), el("th", { text: "Source" }))),
+      el("tbody", {}, o.rows.map(r => el("tr", {}, cell(r.t, "theme"), cell(r.v), cell(r.s, "src")))))) : null)));
+
+  document.getElementById("cons").replaceChildren(...CONSEQUENCES.map((c, i) => el("div", { class: "con rv", style: "--d:" + (i % 2) },
+    el("h3", { text: c.q }), el("p", { text: c.d }), txt(c.finding))));
+}
+
+function channel(c, i) {
+  const d = c.deep;
+  let k = 0;
+  const row = (label, body) => el("div", { class: "row rv2", style: "--d:" + (k++) }, el("span", { class: "spec", text: label }), el("div", {}, body));
+  const tagCls = t => t ? " " + t.toLowerCase().replace(/[^a-z]+/g, "-") : "";
+  return el("section", { class: "chan", id: c.id, "aria-labelledby": c.id + "-h", style: "--slab:" + swatch(i).bg + ";--slab-ink:" + swatch(i).fg },
+    el("div", { class: "chan-id rv2" },
+      el("span", { class: "chan-num", text: String(i + 1).padStart(2, "0") }),
+      el("h3", { id: c.id + "-h", text: c.name }),
+      el("span", { class: "who", text: c.stage + " · Researched by " + c.owner })),
+    el("div", { class: "rows" },
+      row("At a glance", el("div", { class: "glance" },
+        el("div", { class: "ai-col" }, el("span", { class: "spec", text: "AI is taking" }), el("ul", {}, c.automates.map(x => el("li", { text: x })))),
+        el("div", {}, el("span", { class: "spec", text: "Stays human" }), el("ul", {}, c.human.map(x => el("li", { text: x })))))),
+      row("What it's for", el("div", {}, d.note ? txt(d.note) : null,
+        el("ol", { class: "goals" }, d.purpose.map(x => el("li", { class: isTodo(x) ? "todo" : "", text: x }))))),
+      row("Roles today", el("div", { class: "roles" }, d.roles.map(r => el("div", { class: "role" },
+        el("b", { class: isTodo(r.t) ? "todo" : "", text: r.t }), txt(r.d))))),
+      row("Workflow", Array.isArray(d.workflow)
+        ? el("ol", { class: "flow" }, d.workflow.map(x => el("li", {}, el("span", { class: "st" },
+            el("span", { class: "fs", text: x.step }), el("span", { class: "ft" + tagCls(x.tag), text: x.tag || "Untagged" })))))
+        : txt(d.workflow)),
+      row("We tested it", txt(d.tested)),
+      row("Forecast", el("div", { class: "fc" },
+        el("div", {}, el("span", { class: "spec", text: "1–3 years" }), txt(d.short)),
+        el("div", {}, el("span", { class: "spec", text: "3–5 years" }), txt(d.medium)))),
+      row("Unintended consequence", txt(d.consequence))));
+}
+
+/* ============ The test ============ */
+const KEY = "spot-the-machine-v2";
+let state = { h: 0, a: 0, log: [], revealed: false };
+try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s && typeof s.h === "number") state = s; } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+const pct = (a, n) => n ? Math.round(a / n * 100) + "%" : "–";
+
+function renderAd() {
+  const ad = document.getElementById("ad");
+  ad.style.aspectRatio = AD.ratio.replace(":", " / ");
+  const kids = [AD.src ? el("img", { src: AD.src, alt: "The test ad" })
+    : el("div", { class: "ph" }, el("div", {}, el("b", { text: AD.ratio }), el("span", { class: "spec", text: "The ad goes here" })))];
+  if (state.revealed) kids.push(el("div", { class: "stamp", text: "AI · ADOBE FIREFLY" }));
+  ad.replaceChildren(...kids);
+  document.getElementById("adSpec").textContent = [AD.format, AD.ratio, state.revealed ? "Made with Adobe Firefly" : "Medium withheld"].join(" · ");
+}
+function renderVotes(bumped) {
+  const n = state.h + state.a;
+  document.getElementById("cH").textContent = state.h;
+  document.getElementById("cA").textContent = state.a;
+  document.getElementById("sN").textContent = n;
+  document.getElementById("sAI").textContent = state.revealed ? pct(state.a, n) : "?";
+  if (bumped) { const b = document.getElementById(bumped); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); }
+}
+function renderAnswer() {
+  const R = state.revealed, box = document.getElementById("answer"), sheet = document.getElementById("sheet");
+  const rb = document.getElementById("revealBtn");
+  rb.textContent = R ? "Hide the answer" : "Reveal the answer";
+  rb.setAttribute("aria-pressed", String(R));
+  box.hidden = !R; sheet.hidden = !R;
+  if (!R) return;
+  box.replaceChildren(
+    el("span", { class: "spec", text: "The answer: AI" }),
+    el("p", {}, "Made with Adobe Firefly. We kept 1 of ", el("b", { class: isTodo(AD.attempts) ? "todo" : "", text: AD.attempts }), " attempts."),
+    el("div", {}, el("span", { class: "spec", text: "The prompt" }), el("p", { class: "prompt" + (isTodo(AD.prompt) ? " todo" : ""), text: AD.prompt })),
+    el("div", {}, el("span", { class: "spec", text: "Our direction notes" }), el("ul", { class: "markup" }, AD.notes.map(x => el("li", { text: x })))));
+  document.getElementById("sheetSpec").textContent = (AD.rejects.length + 1) + " frames · kept 1";
+  const frames = [AD.src, ...AD.rejects];
+  document.getElementById("contacts").replaceChildren(...frames.map((src, i) => el("div", { class: "contact" + (i === 0 ? " keep" : "") },
+    src ? el("img", { src, alt: i === 0 ? "The ad we kept" : "Rejected frame " + (i + 1) }) : null,
+    el("span", { class: "spec", text: String(i + 1).padStart(2, "0") + (i === 0 ? " · kept" : "") }))));
+}
+function renderTest(bumped) { renderAd(); renderVotes(bumped); renderAnswer(); }
+
+function vote(k) { state[k]++; state.log.push(k); save(); renderVotes(k === "h" ? "cH" : "cA"); }
+document.getElementById("vH").addEventListener("click", () => vote("h"));
+document.getElementById("vA").addEventListener("click", () => vote("a"));
+document.getElementById("undoBtn").addEventListener("click", () => {
+  const k = state.log.pop(); if (k) { state[k] = Math.max(0, state[k] - 1); save(); renderVotes(); }
+});
+document.getElementById("revealBtn").addEventListener("click", () => { state.revealed = !state.revealed; save(); renderTest(); });
+function showClear() { document.getElementById("clearSlot").replaceChildren(el("button", { class: "linkbtn", type: "button", text: "Clear votes", onclick: askClear })); }
+function askClear() {
+  document.getElementById("clearSlot").replaceChildren(el("span", { class: "note" }, "Clear every vote? ",
+    el("button", { class: "linkbtn", type: "button", text: "Clear", onclick: () => { state = { h: 0, a: 0, log: [], revealed: false }; save(); showClear(); renderTest(); } }),
+    " · ", el("button", { class: "linkbtn", type: "button", text: "Cancel", onclick: showClear })));
+}
+
+/* ============ Motion + nav ============ */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+function watch() {
+  const targets = document.querySelectorAll("section, .chan, header.hero");
+  if (!("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -15% 0px" });
+  targets.forEach(t => io.observe(t));
+  const groups = ["job", "firefly", "channels", "outlook", "consequences", "test"];
+  const spy = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const id = groups.includes(e.target.id) ? e.target.id : null;
+    document.querySelectorAll("#links a").forEach(a => a.setAttribute("aria-current", a.dataset.for === id ? "true" : "false"));
+  }), { rootMargin: "-45% 0px -50% 0px" });
+  groups.forEach(g => spy.observe(document.getElementById(g)));
+}
+let tick = false;
+function fill() {
+  tick = false;
+  const tl = document.getElementById("tl"), box = tl.getBoundingClientRect();
+  const p = reduce.matches ? 1 : Math.min(1, Math.max(0, (innerHeight * 0.6 - box.top) / box.height));
+  tl.style.setProperty("--p", p.toFixed(4));
+  const reach = p * box.height + 40;
+  tl.querySelectorAll(".node").forEach(n => n.classList.toggle("lit", n.offsetTop <= reach));
+}
+addEventListener("scroll", () => { if (!tick) { tick = true; requestAnimationFrame(fill); } }, { passive: true });
+addEventListener("resize", fill);
+
+renderStatic();
+showClear();
+renderTest();
+watch();
+fill();
+
+/* ============ Motion: hero halftone, headline, scroll effects, ticker, reveal burst ============ */
+(function heroWords() {
+  const h1 = document.querySelector(".hero h1");
+  const words = h1.textContent.trim().split(/\s+/);
+  h1.replaceChildren(...words.flatMap((w, i) => [el("span", { class: "w", style: "--i:" + i, text: w }), i < words.length - 1 ? " " : null]).filter(x => x !== null));
+})();
+
+/* Two halftone screens (aqua at 15°, rose at 75°) plus a fine ink screen, like CMYK plates.
+   The dots swell around the pointer; move fast and the plates drift out of register. */
+(function halftone() {
+  const cv = document.getElementById("halftone"); if (!cv || !cv.getContext) return;
+  const ctx = cv.getContext("2d"), hero = document.getElementById("top");
+  const LAYERS = [
+    { a: 15, col: "rgba(80, 175, 205, .78)", gain: 1, lag: .10 },
+    { a: 75, col: "rgba(226, 104, 150, .72)", gain: 1, lag: .06 },
+    { a: 45, col: "rgba(30, 28, 42, .55)", gain: .55, lag: .14 }
+  ];
+  const S = 17;
+  let W = 0, H = 0, dpr = 1, visible = true, raf = 0, t0 = performance.now(), lastMove = -1e9;
+  const ptr = { x: 0, y: 0, tx: 0, ty: 0 };
+  const centers = LAYERS.map(() => ({ x: 0, y: 0 }));
+  function size() {
+    const r = cv.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = r.width; H = r.height; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    if (!ptr.x) { ptr.x = ptr.tx = W * .78; ptr.y = ptr.ty = H * .55; centers.forEach(c => { c.x = ptr.x; c.y = ptr.y; }); }
+  }
+  const smooth = (a, b, x) => { const k = Math.min(1, Math.max(0, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
+  function draw(now) {
+    const t = (now - t0) / 1000, narrow = W < 760;
+    if (now - lastMove > 2500) { ptr.tx = W * (narrow ? .5 : .72) + Math.cos(t * .35) * W * (narrow ? .3 : .16); ptr.ty = H * (narrow ? .8 : .52) + Math.sin(t * .5) * H * .2; }
+    ptr.x += (ptr.tx - ptr.x) * .08; ptr.y += (ptr.ty - ptr.y) * .08;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = "multiply";
+    const sig = Math.max(160, Math.min(W, H) * .32), R = Math.hypot(W, H) / 2 + S, cxm = W / 2, cym = H / 2;
+    LAYERS.forEach((L, li) => {
+      const c = centers[li]; c.x += (ptr.x - c.x) * L.lag; c.y += (ptr.y - c.y) * L.lag;
+      const ang = L.a * Math.PI / 180, ca = Math.cos(ang), sa = Math.sin(ang);
+      ctx.fillStyle = L.col; ctx.beginPath();
+      for (let u = -R; u <= R; u += S) for (let v = -R; v <= R; v += S) {
+        const x = cxm + u * ca - v * sa, y = cym + u * sa + v * ca;
+        if (x < -S || y < -S || x > W + S || y > H + S) continue;
+        const fade = narrow ? smooth(H * .5, H * .98, y) * .8 : smooth(W * .34, W * .82, x);
+        if (fade <= 0) continue;
+        const dx = x - c.x, dy = y - c.y;
+        const f = Math.exp(-(dx * dx + dy * dy) / (2 * sig * sig)) + .28 * (.5 + .5 * Math.sin(x * .011 + y * .007 - t * 1.1 + li));
+        const r = S * .52 * Math.min(1, f) * fade * L.gain;
+        if (r < .5) continue;
+        ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 6.2832);
+      }
+      ctx.fill();
+    });
+    if (visible && !reduce.matches) raf = requestAnimationFrame(draw);
+  }
+  hero.addEventListener("pointermove", e => { const r = cv.getBoundingClientRect(); ptr.tx = e.clientX - r.left; ptr.ty = e.clientY - r.top; lastMove = performance.now(); });
+  addEventListener("resize", () => { size(); if (reduce.matches) draw(performance.now()); });
+  if ("IntersectionObserver" in window) new IntersectionObserver(es => es.forEach(e => {
+    visible = e.isIntersecting; cancelAnimationFrame(raf); if (visible) raf = requestAnimationFrame(draw);
+  })).observe(hero);
+  size(); draw(performance.now());
+})();
+
+/* Ticker: a steady crawl that speeds up with scroll velocity. */
+const ticker = document.getElementById("ticker");
+let tickOff = 0, tickVel = 0, lastY = scrollY, lastT = performance.now();
+function tickLoop(now) {
+  const dt = Math.min(.05, (now - lastT) / 1000); lastT = now;
+  const dy = Math.abs(scrollY - lastY); lastY = scrollY;
+  tickVel += (Math.min(1400, dy / Math.max(dt, .001)) - tickVel) * .08;
+  tickOff += (55 + tickVel * .5) * dt;
+  const half = ticker.scrollWidth / 2;
+  if (half) ticker.style.transform = "translateX(" + (-(tickOff % half)).toFixed(1) + "px)";
+  requestAnimationFrame(tickLoop);
+}
+if (!reduce.matches) requestAnimationFrame(tickLoop);
+
+/* Scroll-linked: progress bar, the headline condensing as you leave the hero, the 2031 ghost drifting. */
+const prog = document.getElementById("progress"), heroH1 = document.querySelector(".hero h1"), ghost = document.querySelector("#outlook .ghost"), outlook = document.getElementById("outlook");
+let sTick = false;
+function onScroll() {
+  sTick = false;
+  const max = document.documentElement.scrollHeight - innerHeight;
+  prog.style.transform = "scaleX(" + (max > 0 ? scrollY / max : 0).toFixed(4) + ")";
+  if (reduce.matches) return;
+  const hp = Math.min(1, Math.max(0, scrollY / (innerHeight * .9)));
+  heroH1.style.fontStretch = (100 - 25 * hp).toFixed(1) + "%";
+  heroH1.style.transform = "translateY(" + (hp * 40).toFixed(1) + "px)";
+  const r = outlook.getBoundingClientRect(), op = (innerHeight - r.top) / (innerHeight + r.height);
+  ghost.style.transform = "translateX(" + ((.5 - op) * 260).toFixed(1) + "px)";
+}
+addEventListener("scroll", () => { if (!sTick) { sTick = true; requestAnimationFrame(onScroll); } }, { passive: true });
+onScroll();
+
+/* Reveal: the stamp slams down, the proof shakes, ink flies, the room's number counts up. */
+function inkBurst() {
+  if (reduce.matches) return;
+  const proof = document.getElementById("proof"), cols = ["var(--cyan)", "var(--magenta)", "var(--yellow)", "var(--red)"];
+  proof.classList.remove("shake"); void proof.offsetWidth; proof.classList.add("shake");
+  for (let i = 0; i < 26; i++) {
+    const a = i / 26 * 6.2832 + (i % 3) * .4, d = 90 + (i * 37) % 140;
+    const dot = el("span", { class: "ink", style: "--c:" + cols.at(i % 4) + ";--s:" + (8 + (i * 7) % 18) + "px;--dx:" + (Math.cos(a) * d).toFixed(0) + "px;--dy:" + (Math.sin(a) * d).toFixed(0) + "px;animation-delay:" + (120 + (i % 5) * 20) + "ms" });
+    proof.append(dot); setTimeout(() => dot.remove(), 1300);
+  }
+}
+function countUp(node, to) {
+  if (reduce.matches || to == null) return;
+  const start = performance.now();
+  const step = now => { const k = Math.min(1, (now - start) / 900), e = 1 - Math.pow(1 - k, 3);
+    node.textContent = Math.round(to * e) + "%"; if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+document.getElementById("revealBtn").addEventListener("click", () => {
+  if (!state.revealed) return;
+  inkBurst();
+  const n = state.h + state.a; if (n) countUp(document.getElementById("sAI"), Math.round(state.a / n * 100));
+});
+
+</script>
+
+</body>
+</html>
